@@ -3,27 +3,15 @@ pylibjpeg-turbo
 
 Python wrapper for the libjpeg-turbo library
 
-## Example:
+ -- This README is a Work in Progress --
 
-```python
-
-    import pylibjpeg_turbo
-
-    pylibjpeg_turbo.run()
-```
 
 
 ## Development
 
 To install the development version of pylibjpeg-turbo:
 
-    git clone pydicom/pylibjpeg-turbo
-
-    # create a virtual environment and install all required dev dependencies
+    git clone https://github.com/pydicom/pylibjpeg-turbo
     cd pylibjpeg_turbo
-    make devenv
+    python -m pip install -e .[dev]
 
-To run the tests, use `make tests` or `make coverage` for a complete report.
-
-To generate the documentation pages use `make docs` or `make serve-docs` for
-starting a webserver with the generated documentation
