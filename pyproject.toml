@@ -19,9 +19,9 @@ authors = [
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
     "License :: OSI Approved :: BSD License",
 ]
@@ -54,6 +54,24 @@ test = [
 ]
 
 
+[project.entry-points."pylibjpeg.pixel_data_decoders"]
+"1.2.840.10008.1.2.4.50" = "pylibjpeg_turbo:decode_pixel_data"
+"1.2.840.10008.1.2.4.51" = "pylibjpeg_turbo:decode_pixel_data"
+"1.2.840.10008.1.2.4.57" = "pylibjpeg_turbo:decode_pixel_data"
+"1.2.840.10008.1.2.4.70" = "pylibjpeg_turbo:decode_pixel_data"
+"1.2.840.10008.1.2.4.80" = "pylibjpeg_turbo:decode_pixel_data"
+"1.2.840.10008.1.2.4.81" = "pylibjpeg_turbo:decode_pixel_data"
+
+[project.entry-points."pylibjpeg.jpeg_decoders"]
+pylibjpeg_turbo = "pylibjpeg_turbo:decode"
+
+[project.entry-points."pylibjpeg.jpeg_ls_decoders"]
+pylibjpeg_turbo = "pylibjpeg_turbo:decode"
+
+[project.entry-points."pylibjpeg.jpeg_xt_decoders"]
+pylibjpeg_turbo = "pylibjpeg_turbo:decode"
+
+
 [tool.pytest.ini_options]
 markers = [
     "functional: marks tests as functional (deselect with '-m \"not functional\"')",
@@ -67,8 +85,6 @@ addopts = [
 
 
 [tool.black]
-line-length = 79
-target-version = ['py39', 'py310']
 include = '\.pyi?$'
 extend-exclude = '''
 # A regex preceded with ^/ will apply only to files and directories
@@ -103,7 +119,6 @@ ignore = [
 ]
 fixable = ["I"]
 fix = true
-line-length=79
 target-version = "py38"
 
 [tool.ruff.per-file-ignores]
