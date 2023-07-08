@@ -1,8 +1,7 @@
 Copyright (c) 2023, Darcy Mason and pylibjpeg-turbo authors
 All rights reserved.
 
-This library is released under BSD-style licenses as per the
-wrapped libjpeg-turbo library:
+By linking to the libjpeg-turbo library, this software is based in part on the work of the Independent JPEG Group, and is released under BSD-style licenses as per the wrapped libjpeg-turbo library:
 
 
 libjpeg-turbo Licenses

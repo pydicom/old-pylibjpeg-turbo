@@ -7,7 +7,7 @@ nav:
   - Reference: reference.md
   - Explanation: explanation.md
 
-repo_url: pydicom/pylibjpeg-turbo
+repo_url: https://github.com/pydicom/pylibjpeg-turbo
 
 theme:
     name: readthedocs

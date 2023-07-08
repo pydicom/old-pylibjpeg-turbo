@@ -27,7 +27,7 @@ classifiers = [
 ]
 
 dependencies = [
-
+   "PyTurboJPEG"
 ]
 [project.urls]
 Source = "pydicom/pylibjpeg-turbo"
@@ -48,12 +48,9 @@ docs = [
     "mkdocstrings[python]",
 ]
 test = [
-    "nox",
     "pytest >=4.0.0",
     "pytest-cov",
     "pytest-icdiff",
-    "pytest-mock",
-    "pytest-randomly",
 ]
 
 
