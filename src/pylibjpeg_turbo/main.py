@@ -1,47 +1,16 @@
+from pathlib import Path
+from io import BytesIO
+import warnings
+from turbojpeg import TurboJPEG
 
 
-def decode(stream, **kwargs):
-    """Return the decoded JPEG data from `stream` as a
-    :class:`numpy.ndarray`.
-
-    +++ 1.0
-
-    Parameters
-    ----------
-    stream : str, pathlib.Path, bytes or file-like
-        The path to the JPEG file or a Python object containing the
-        encoded JPEG data. If using a file-like then the object must have
-        ``tell()``, ``seek()`` and ``read()`` methods.
-
-    Returns
-    -------
-    numpy.ndarray
-        An array of containing the decoded image data.
-
-    Raises
-    ------
-    RuntimeError
-        If the decoding failed.
-    """
-    raise NotImplementedError("pylibjpeg_turbo is a work-in-progress")
-
-def decode_pixel_data(stream, ds=None, **kwargs):
-    """Return the decoded JPEG data as a :class:`numpy.ndarray`.
-
-    Intended for use with *pydicom* ``Dataset`` objects.
+def decode(buff, transform=0, reshape=True):
+    """Return the decoded JPEG data from `buff` as a :class:`numpy.ndarray`.
 
     Parameters
     ----------
-    stream : bytes or file-like
-        A Python object containing the encoded JPEG data. If not
-        :class:`bytes` then the object must have ``tell()``, ``seek()`` and
-        ``read()`` methods.
-    ds : pydicom.dataset.Dataset, optional
-        A :class:`~pydicom.dataset.Dataset` containing the group ``0x0028``
-        elements corresponding to the *Pixel data*. If used then the
-        *Samples per Pixel*, *Bits Stored* and *Pixel Representation* values
-        will be checked against the JPEG data and warnings issued if
-        different.
+    buff : str | pathlib.Path | bytes
+        The path to a JPEG file or the `bytes` representing encoded JPEG data.
 
     Returns
     -------
@@ -53,4 +22,58 @@ def decode_pixel_data(stream, ds=None, **kwargs):
     RuntimeError
         If the decoding failed.
     """
-    raise NotImplementedError("pylibjpeg_turbo pixel decoding is a work-in-progress")
+    
+    if transform != 0 or reshape is False:
+        raise NotImplementedError("Currently only handle transform 0 and reshape True")
+    
+    jpeg = TurboJPEG(LIB_PATH)
+    if isinstance(buff, (str, Path)):
+        buff = open(buff, "rb").read()
+    width, height, jpeg_subsample, jpeg_colorspace = jpeg.decode_header(buff)
+    print(width, height, jpeg_subsample, jpeg_colorspace)
+    return jpeg.decode(buff)
+
+
+def decode_pixel_data(arr, ds=None, **kwargs):
+    """Return the decoded JPEG data from `arr` as a :class:`numpy.ndarray`.
+
+    Intended for use with *pydicom* ``Dataset`` objects.
+
+    Parameters
+    ----------
+    arr : numpy.ndarray | bytes
+        The encoded JPEG image as a ``np.uint8`` 1D array or :class:`bytes`.
+    ds : pydicom.dataset.Dataset | None
+        A :class:`~pydicom.dataset.Dataset` containing the group ``0x0028``
+        elements corresponding to the *Pixel Data*. Must have
+        *Photometric Interpretation* (``'MONOCHROME1'``, ``'MONOCHROME2'``,
+        ``'RGB'``, ``'YBR_FULL'``, or ``'YBR_FULL_422'``).
+    **kwargs: Dict[str, Any]
+        Additional keyword arguments.
+
+    Returns
+    -------
+    numpy.ndarray
+        The decoded image data as a 1D ``numpy.uint8`` array.
+
+    """
+    colors = ["MONOCHROME1", "MONOCHROME2", "RGB", "YBR_FULL", "YBR_FULL_422"]
+
+    photometric = ds.get("PhotometricInterpretation") or kwargs.get(
+        "photometric_interpretation"
+    )
+    if not photometric:
+        raise ValueError(
+            "Photometric Interpretation element is not in the Dataset, "
+            "nor is it supplied as keyword argument `photometric_interpretation`."
+        )
+
+    if photometric not in colors:
+        warnings.warn(
+            f"Unsupported Photometric Interpretation '{photometric}'. No "
+            "color transformation will be applied"
+        )
+
+    transform = 1 if photometric == "RGB" else 0
+
+    return decode(arr, transform, reshape=False)
