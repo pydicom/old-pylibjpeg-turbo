@@ -96,6 +96,9 @@ extend-exclude = '''
 ^/.dist
 '''
 
+[tool.cibuildwheel]
+# build = ["3.9", "3.10", "3.11"]
+
 
 [tool.ruff]
 # see https://github.com/charliermarsh/ruff

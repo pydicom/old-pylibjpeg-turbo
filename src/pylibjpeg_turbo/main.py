@@ -26,7 +26,7 @@ def decode(buff, transform=0, reshape=True):
     if transform != 0 or reshape is False:
         raise NotImplementedError("Currently only handle transform 0 and reshape True")
     
-    jpeg = TurboJPEG(LIB_PATH)
+    jpeg = TurboJPEG()
     if isinstance(buff, (str, Path)):
         buff = open(buff, "rb").read()
     width, height, jpeg_subsample, jpeg_colorspace = jpeg.decode_header(buff)
