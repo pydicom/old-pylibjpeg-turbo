@@ -1,16 +1,17 @@
 
-
 [build-system]
-requires = ["flit_core>=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["scikit-build-core"]
+build-backend = "scikit_build_core.build"
 
 [project]
-name = "pylibjpeg_turbo"
+name = "libjpeg_turbo"
 readme = "README.md"
 license = { file = "LICENSE.md" }
 requires-python = ">=3.9"
-dynamic = ["version", "description"]
-
+# dynamic = ["version", "description"]
+version = "0.1.0"
+description = "Python wrapper for libjpeg-turbo"
+src = "src/libjpeg_turbo"
 authors = [
     {name = "Darcy Mason", email = "darcymason@gmail.com"},
 ]
@@ -97,7 +98,7 @@ extend-exclude = '''
 '''
 
 [tool.cibuildwheel]
-# build = ["3.9", "3.10", "3.11"]
+build = "cp310-manylinux_x86_64"
 
 
 [tool.ruff]
@@ -130,3 +131,8 @@ target-version = "py38"
 
 [tool.ruff.pydocstyle]
 convention = "pep257"  # Accepts: "google", "numpy", or "pep257".
+
+[tool.scikit-build]
+wheel.py-api = "py3"  # doesn't depend on specific Python version (ctypes)
+cmake.verbose = false
+cmake.source-dir = "src/libjpeg-turbo"
