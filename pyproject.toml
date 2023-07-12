@@ -136,3 +136,4 @@ convention = "pep257"  # Accepts: "google", "numpy", or "pep257".
 wheel.py-api = "py3"  # doesn't depend on specific Python version (ctypes)
 cmake.verbose = false
 cmake.source-dir = "src/libjpeg-turbo"
+cmake.build-rpath = "lib64"
