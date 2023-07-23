@@ -4,7 +4,7 @@ requires = ["scikit-build-core"]
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "libjpeg_turbo"
+name = "pylibjpeg_turbo"
 readme = "README.md"
 license = { file = "LICENSE.md" }
 requires-python = ">=3.9"
@@ -135,5 +135,5 @@ convention = "pep257"  # Accepts: "google", "numpy", or "pep257".
 [tool.scikit-build]
 wheel.py-api = "py3"  # doesn't depend on specific Python version (ctypes)
 cmake.verbose = false
-cmake.source-dir = "src/libjpeg-turbo"
-cmake.build-rpath = "lib64"
+# cmake.source-dir = "src/libjpeg-turbo"
+# cmake.build-rpath = "lib64"
