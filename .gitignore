@@ -65,3 +65,8 @@ target/
 
 .vscode/settings.json
 *.whl
+libjpeg-turbo-prefix/tmp/libjpeg-turbo-cfgcmd.txt
+CMakeFiles/**/*
+Makefile
+CMakeCache.txt
+cmake_install.cmake
