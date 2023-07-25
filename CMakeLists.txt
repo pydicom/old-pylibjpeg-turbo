@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4...3.22)
+cmake_minimum_required(VERSION 3.4)
 
 include(ExternalProject)
 
@@ -7,28 +7,25 @@ project(
     VERSION ${SKBUILD_PROJECT_VERSION}
 )
 
-set(BUILD_SHARED_LIBS "On")
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-# Rpath from https://duerrenberger.dev/blog/2021/08/04/understanding-rpath-with-cmake/
-# use, i.e. don't skip the full RPATH for the build tree
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
- 
-# when building, don't use the install RPATH already
-# (but later on when installing)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
- 
-# add the automatically determined parts of the RPATH
-# which point to directories outside the build tree to the install RPATH
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-find_program(MAKE_EXE NAMES gmake nmake make)
-ExternalProject_Add(
-    libjpeg-turbo
+# Modeled on clang-format-wheel for some params here
+ExternalProject_Add(libjpeg-turbo
     GIT_REPOSITORY https://github.com/libjpeg-turbo/libjpeg-turbo.git
     GIT_TAG 3.0.0
     GIT_SHALLOW
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=turbo
-    INSTALL_COMMAND ${CMAKE_COMMAND} --build . --target install
+    # SOURCE_DIR ${CMAKE_BINARY_DIR}/libjpeg-turbo
+    BINARY_DIR ${CMAKE_BINARY_DIR}/turbo
+    UPDATE_COMMAND ""
+    INSTALL_COMMAND ""
+    USES_TERMINAL_DOWNLOAD 1
+    USES_TERMINAL_CONFIGURE 1
+    USES_TERMINAL_BUILD 1
+    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF
+    INSTALL_COMMAND ${CMAKE_COMMAND} --build . --target turbojpeg
+)
+
+install(
+  TARGETS
+    turbojpeg
+  DESTINATION dist
 )
