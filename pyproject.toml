@@ -1,21 +1,17 @@
-[build-system] # How pip and other frontends should build this project
-requires = ["py-build-cmake~=0.1.8"]
+# pyproject.toml
+# cmake help from https://github.com/tttapa/py-build-cmake/issues/16
+[build-system]
+requires = ["py-build-cmake~=0.1.9a2"]
 build-backend = "py_build_cmake.build"
 
-[tool.py-build-cmake.module] # Where to find the Python module to package
-directory = "src"
+[tool.py-build-cmake.sdist]
+include = ["CMakeLists.txt", "extern/libjpeg-turbo"]
 
-
-[tool.py-build-cmake.sdist] # What to include in source distributions
-include = ["CMakeLists.txt", "src/*", "extern/**/*"]
-
-
-[tool.py-build-cmake.cmake] # How to build the CMake project
+[tool.py-build-cmake.cmake]
+minimum_version = "3.17"
 build_type = "RelWithDebInfo"
-build_path = "build"
-source_path = "."  # "extern/libjpeg-turbo"
 build_args = ["-j"]
-install_components = ["python_module"]
+install_components = ["shlib"]
 
 [project]
 name = "pylibjpeg_turbo"

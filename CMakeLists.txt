@@ -1,35 +1,28 @@
-# Modeled after https://github.com/tttapa/py-build-cmake/issues/11
-# except need ExternalProject
+# CMakeLists.txt
+# from https://github.com/tttapa/py-build-cmake/issues/16
+cmake_minimum_required(VERSION 3.17)
+project(pylibjpeg_turbo)
 
 include(ExternalProject)
 
-
-cmake_minimum_required(VERSION 3.3)
-project(pylibjpeg_turbo)
-find_package(Python3 REQUIRED COMPONENTS Development)
-
-set(PROJECT_INSTALL_STEPS_FILE project_install_steps.cmake)
-set(BUILD_SHARED_LIBS On)
-set(LIB_INSTALL_DIR ${PY_BUILD_CMAKE_MODULE_NAME})
-
-
-# Modeled on clang-format-wheel for some params here
-# for install command from https://stackoverflow.com/questions/30205379/
+set(JPEG_INSTALL_DIR ${PROJECT_BINARY_DIR}/libjpeg-turbo-install)
 ExternalProject_Add(libjpeg-turbo
-    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/libjpeg-turbo
-    BUILD_COMMAND ${CMAKE_COMMAND} --build . --target turbojpeg
-    INSTALL_COMMAND ""
+    SOURCE_DIR
+        ${PROJECT_SOURCE_DIR}/extern/libjpeg-turbo
+    CMAKE_CACHE_ARGS
+        -DBUILD_SHARED_LIBS:BOOL=On
+        -DENABLE_SHARED:BOOL=On
+        -DENABLE_STATIC:BOOL=Off
+        -DCMAKE_INSTALL_PREFIX:STRING=${JPEG_INSTALL_DIR}
+        -DCMAKE_INSTALL_LIBDIR:STRING=lib
+        -DCMAKE_INSTALL_DOCDIR:STRING=doc
+        -DCMAKE_PLATFORM_NO_VERSIONED_SONAME:BOOL=On
 )
-
-# Install the module
-if (WIN32)
-    install(TARGETS turbojpeg
-            EXCLUDE_FROM_ALL
-            RUNTIME DESTINATION ${PY_BUILD_CMAKE_MODULE_NAME}
-            COMPONENT python_module)
-else()
-    install(TARGETS turbojpeg
-            EXCLUDE_FROM_ALL
-            LIBRARY DESTINATION ${PY_BUILD_CMAKE_MODULE_NAME}
-            COMPONENT python_module)
-endif()
+set(PY_BUILD_CMAKE_MODULE_NAME ${PROJECT_NAME} CACHE STRING "")
+install(DIRECTORY ${JPEG_INSTALL_DIR}/lib
+        DESTINATION ${PY_BUILD_CMAKE_MODULE_NAME}/libjpeg-turbo
+        COMPONENT shlib
+        FILES_MATCHING REGEX "(lib)?turbojpeg.(so|dll|dylib)$")
+install(FILES ${JPEG_INSTALL_DIR}/doc/LICENSE.md
+        DESTINATION ${PY_BUILD_CMAKE_MODULE_NAME}/libjpeg-turbo
+        COMPONENT shlib)
