@@ -5,7 +5,7 @@ requires = ["py-build-cmake~=0.1.9a2"]
 build-backend = "py_build_cmake.build"
 
 [tool.py-build-cmake.sdist]
-include = ["CMakeLists.txt", "extern/libjpeg-turbo"]
+include = [".gitmodules", "CMakeLists.txt", "extern/libjpeg-turbo"]
 
 [tool.py-build-cmake.cmake]
 minimum_version = "3.17"
