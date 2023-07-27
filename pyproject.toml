@@ -1,7 +1,21 @@
+[build-system] # How pip and other frontends should build this project
+requires = ["py-build-cmake~=0.1.8"]
+build-backend = "py_build_cmake.build"
 
-[build-system]
-requires = ["scikit-build-core"]
-build-backend = "scikit_build_core.build"
+[tool.py-build-cmake.module] # Where to find the Python module to package
+directory = "src"
+
+
+[tool.py-build-cmake.sdist] # What to include in source distributions
+include = ["CMakeLists.txt", "src/*", "extern/**/*"]
+
+
+[tool.py-build-cmake.cmake] # How to build the CMake project
+build_type = "RelWithDebInfo"
+build_path = "build"
+source_path = "."  # "extern/libjpeg-turbo"
+build_args = ["-j"]
+install_components = ["python_module"]
 
 [project]
 name = "pylibjpeg_turbo"
@@ -11,7 +25,7 @@ requires-python = ">=3.9"
 # dynamic = ["version", "description"]
 version = "0.1.0"
 description = "Python wrapper for libjpeg-turbo"
-src = "src/libjpeg_turbo"
+# src = "src/libjpeg_turbo"
 authors = [
     {name = "Darcy Mason", email = "darcymason@gmail.com"},
 ]
@@ -31,7 +45,7 @@ dependencies = [
    "PyTurboJPEG"
 ]
 [project.urls]
-Source = "pydicom/pylibjpeg-turbo"
+Source = "https://github.com/pydicom/pylibjpeg-turbo"
 
 # [project.scripts]
 # script_name = "pylibjpeg_turbo:function"
