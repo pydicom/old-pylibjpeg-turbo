@@ -23,15 +23,13 @@ jobs:
         with:
           submodules: recursive
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.14.0
-        # env:
-        #   CIBW_SOME_OPTION: value
-        #    ...
-        # with:
-        #   package-dir: .
-        #   output-dir: wheelhouse
-        #   config-file: "{package}/pyproject.toml"
+        uses: pypa/cibuildwheel@v2.14.1
+        env:
+          CIBW_BUILD: 'cp311-*'
+        with:
+          output-dir: dist
 
       - uses: actions/upload-artifact@v3
         with:
-          path: ./wheelhouse/*.whl
+          path: ./dist/*.whl
+          name: py-build-cmake-libjpeg-turbo-whl
