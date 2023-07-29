@@ -1,19 +1,21 @@
+# pyproject.toml
+# py-build-cmake help from https://github.com/tttapa/py-build-cmake/issues/16
 
 
 [build-system]
-requires = ["flit_core>=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["py-build-cmake~=0.1.9a2"]
+build-backend = "py_build_cmake.build"
 
+
+# --------------- Project  -------------------
 [project]
-name = "pylibjpeg_turbo"
+name = "pylibjpeg-turbo"
 readme = "README.md"
 license = { file = "LICENSE.md" }
 requires-python = ">=3.9"
-dynamic = ["version", "description"]
-
-authors = [
-    {name = "Darcy Mason", email = "darcymason@gmail.com"},
-]
+version = "0.1.0"
+description = "Python wrapper for libjpeg-turbo"
+authors = [{name = "Darcy Mason", email = "darcymason@gmail.com"}]
 
 # see https://pypi.org/classifiers/
 classifiers = [
@@ -29,11 +31,9 @@ classifiers = [
 dependencies = [
    "PyTurboJPEG"
 ]
-[project.urls]
-Source = "pydicom/pylibjpeg-turbo"
 
-# [project.scripts]
-# script_name = "pylibjpeg_turbo:function"
+[project.urls]
+Source = "https://github.com/pydicom/pylibjpeg-turbo"
 
 [project.optional-dependencies]
 dev = [
@@ -53,7 +53,6 @@ test = [
     "pytest-icdiff",
 ]
 
-
 [project.entry-points."pylibjpeg.pixel_data_decoders"]
 "1.2.840.10008.1.2.4.50" = "pylibjpeg_turbo:decode_pixel_data"
 "1.2.840.10008.1.2.4.51" = "pylibjpeg_turbo:decode_pixel_data"
@@ -72,6 +71,23 @@ pylibjpeg_turbo = "pylibjpeg_turbo:decode"
 pylibjpeg_turbo = "pylibjpeg_turbo:decode"
 
 
+# --------------- cmake / build  -------------------
+[tool.py-build-cmake.sdist]
+include = ["CMakeLists.txt", "extern/libjpeg-turbo"]
+
+[tool.py-build-cmake.cmake]
+minimum_version = "3.17"
+build_type = "RelWithDebInfo"
+build_args = ["-j"]
+install_components = ["shlib"]
+abi = "none"
+
+[tool.cibuildwheel]
+build-verbosity = 1
+environment = { PY_BUILD_CMAKE_VERBOSE="1" }
+
+
+# --------------- Testing -------------------------------
 [tool.pytest.ini_options]
 markers = [
     "functional: marks tests as functional (deselect with '-m \"not functional\"')",
@@ -84,6 +100,7 @@ addopts = [
 ]
 
 
+# ------------- Linters, formatting ---------------------
 [tool.black]
 include = '\.pyi?$'
 extend-exclude = '''
@@ -95,10 +112,6 @@ extend-exclude = '''
 ^/.build
 ^/.dist
 '''
-
-[tool.cibuildwheel]
-# build = ["3.9", "3.10", "3.11"]
-
 
 [tool.ruff]
 # see https://github.com/charliermarsh/ruff
